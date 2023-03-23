@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from scipy import stats
+import seaborn as sns
+
+# load data
+# TODO select your file path
+data = pd.read_table("D:\\bioinfomation\\RNAseq\\gene_matrix.txt", index_col=0)
+data = pd.DataFrame(np.log2(data + 0.000001))
+
+# TODO select control and test samples
+contorl = data.loc[:, 'control_1':'control_3'].mean(axis=1)
+test = data.loc[:, 'test_1':test_3'].mean(axis=1)
+log2FC = test - contorl
+print(len(data))
+pvalue = []
+# TODO sets the number of columns for the control and test columns of the target file
+for i in range(0, len(data)):
+    t_test = stats.ttest_ind(data.iloc[i, 0:3], data.iloc[i, 3:6])  # stats.ttest_ind(test,control)
+    pvalue.append(t_test[1])
+'''
+# Volcano plot
+pvalue = np.asarray(pvalue)
+result = pd.DataFrame({'pvalue': pvalue, 'log2FC': log2FC})
+result['-log10(pvalue)'] = -np.log10(result['pvalue'])
+
+result['sig'] = 'normal'
+result.loc[(result.log2FC > 1) & (result.pvalue < 0.05), 'sig'] = 'up'
+result.loc[(result.log2FC < -1) & (result.pvalue < 0.05), 'sig'] = 'down'
+
+sns.scatterplot(x='log2FC', y='-log10(pvalue)',
+                hue='sig',
+                hue_order=('down', 'normal', 'up'),
+                data=result)
+target_gene = list(result.loc['Arg1', ['log2FC', '-log10(pvalue)']])
+plt.text(target_gene[0], target_gene[1], 'Arg1')
+plt.show()
+'''
+filtered_ids_up = []
+filtered_ids_down = []
+for i in range(0, len(data)):
+    if (log2FC[i] >= 1) and (pvalue[i] <= 0.05):
+        filtered_ids_up.append(i)
+    elif (log2FC[i] <= -1) and (pvalue[i] <= 0.05):
+        filtered_ids_down.append(i)
+DEs_up = data.iloc[filtered_ids_up, :]
+DEs_down = data.iloc[filtered_ids_down, :]
+DEs = data.iloc[filtered_ids_up+filtered_ids_down, :]
+# TODO select the up-down-regulated gene export file path
+DEs_up.to_csv('D:\\bioinfomation\\RNAseq\\gene_matrix_DEs_up.txt',sep='\t')
+DEs_down.to_csv('D:\\bioinfomation\\RNAseq\\gene_matrix_DEs_down.txt',sep='\t')
+DEs.to_csv('D:\\bioinfomation\\RNAseq\\gene_matrix_DEs.txt',sep='\t')
