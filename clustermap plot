@@ -1,0 +1,27 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+list1 = pd.read_table('D:\\bioinfomation\\yzh\\RNAseq\\AdultSham_vs_AdultMI_DEs_up.txt')
+list1 = pd.DataFrame(list1)
+list1 = list(list1['gene_ids'])
+
+list2 = pd.read_table('D:\\bioinfomation\\yzh\\RNAseq\\NeonateSham_vs_NeonateMI_DEs_up.txt')
+list2 = pd.DataFrame(list2)
+list2 = list(list2['gene_ids'])
+
+list3 = pd.read_table('D:\\bioinfomation\\yzh\\RNAseq\\NeonateSham_vs_NeonateAR_DEs_up.txt')
+list3 = pd.DataFrame(list3)
+list3 = list(list3['gene_ids'])
+
+listA = list(set(list1) & set(list2) & set(list3))
+
+data = pd.read_table("D:\\bioinfomation\\yzh\\RNAseq\\NeonateSham_vs_NeonateMI.txt", index_col = 0)
+data = pd.DataFrame(np.log2(data+0.000001))
+DEs_list = data[data.index.isin(listA)]
+
+g = sns.clustermap(DEs_list,cmap = 'RdYlGn_r',standard_scale=0,yticklabels=True,figsize=(5, 8),col_cluster=0)
+ax = g.ax_heatmap
+plt.setp(ax.get_yticklabels(),size=10)
+plt.show()
