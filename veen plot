@@ -16,4 +16,3 @@ venn2(subsets=[set(list1), set(list2)],
       alpha=0.6,
       normalize_to=1.0)
 plt.show()
-
