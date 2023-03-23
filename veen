@@ -1,0 +1,19 @@
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib_venn import venn2
+
+list1 = pd.read_table('D:\\bioinfomation\\RNAseq\\NeonateAR_DEs_up.txt')
+list1 = pd.DataFrame(list1)
+list1 = list(list1['gene_ids'])
+
+list2 = pd.read_table('D:\\bioinfomation\\RNAseq\\NeonateMI_DEs_up.txt')
+list2 = pd.DataFrame(list2)
+list2 = list(list2['gene_ids'])
+
+venn2(subsets=[set(list1), set(list2)],
+      set_labels=('NeonateAR_up', 'NeonateMI_up'),
+      set_colors=("#098154", "#c72e29"),
+      alpha=0.6,
+      normalize_to=1.0)
+plt.show()
+
