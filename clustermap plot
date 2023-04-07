@@ -24,4 +24,6 @@ DEs_list = data[data.index.isin(listA)]
 g = sns.clustermap(DEs_list,cmap = 'RdYlGn_r',standard_scale=0,yticklabels=True,figsize=(5, 8),col_cluster=0)
 ax = g.ax_heatmap
 plt.setp(ax.get_yticklabels(),size=10)
+plt.savefig('D:\\bioinfomation\\yzh\\yzh_RNAseq\\AdultSham_vs_AdultMI.png',dpi = 300,bbox_inches = 'tight')
+plt.tight_layout()
 plt.show()
