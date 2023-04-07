@@ -15,4 +15,6 @@ venn2(subsets=[set(list1), set(list2)],
       set_colors=("#098154", "#c72e29"),
       alpha=0.6,
       normalize_to=1.0)
+plt.savefig('D:\\bioinfomation\\yzh\\yzh_RNAseq\\NeonateMI_AdultMI_down.png',dpi = 300,bbox_inches = 'tight')
+plt.tight_layout()
 plt.show()
